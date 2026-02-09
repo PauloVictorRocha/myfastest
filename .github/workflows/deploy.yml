@@ -1,0 +1,31 @@
+name: CI/CD FastHTML
+
+on:
+  push:
+    branches: [ "main" ] # Dispara o deploy ao fazer push na main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Necessário para enviar a imagem ao GHCR
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login no GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build e Push da Imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # A tag será ghcr.io/seu-usuario/seu-repo:latest
+          tags: ghcr.io/${{ github.repository }}:latest
