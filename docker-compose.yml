@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "5001:5001" # Porta padrão do FastHTML
+    volumes:
+      - .:/app # Sincroniza sua pasta local com o container
+    environment:
+      - PYTHONUNBUFFERED=1 # Garante que os logs apareçam no terminal na hora
+      - PORT=5001
+    command: python main.py # Ou o nome do seu arquivo principal
